@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	"real-estate-api/config"
 	"real-estate-api/models"
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+	_ = godotenv.Load()
+
 	config.ConnectDB()
 	config.DB.AutoMigrate(&models.User{})
 

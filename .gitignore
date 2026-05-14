@@ -1,0 +1,37 @@
+# Environment variables
+.env
+
+# Build output
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+real-estate-api
+/dist
+/build
+
+# Test binary
+*.test
+
+# Coverage reports
+*.out
+coverage.out
+
+# Dependency directories (usually not needed for Go modules)
+vendor/
+
+# Logs
+*.log
+
+# Upload files
+/uploads/
+/storage/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -22,4 +22,12 @@ type Property struct {
 	BedRooms  int `json:"bedrooms"`
 	BathRooms int `json:"bathrooms"`
 	Area      int `json:"area"` // square feet
+
+	Address string `json:"address"`
+	City    string `json:"city"`
+
+	Status     string `json:"status" gorm:"default:active"` // active, sold, rented, inactive
+	IsFeatured bool   `json:"is_featured" gorm:"default:false"`
+
+	User User `gorm:"foreignKey:UserID"`
 }

@@ -4,7 +4,9 @@ import (
 	"errors"
 	"real-estate-api/config"
 	"real-estate-api/models"
+	"real-estate-api/utils"
 
+	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 )
 
@@ -69,10 +71,28 @@ func CreateProperty(userID uint, input CreatePropertyInput) (*models.Property, e
 }
 
 // GetAllProperties
-func GetAllProperties() ([]models.Property, error) {
+func GetAllProperties(c *gin.Context) (*utils.Pagination, error) {
 	var properties []models.Property
-	err := config.DB.Find(&properties).Error
-	return properties, err
+
+	query := config.DB.Model(&models.Property{})
+
+	if city := c.Query("city"); city != "" {
+		query = query.Where("city LIKE ?", "%"+city+"%")
+	}
+
+	if minPrice := c.Query("min_price"); minPrice != "" {
+		query = query.Where("price >= ?", minPrice)
+	}
+
+	if maxPrice := c.Query("max_price"); maxPrice != "" {
+		query = query.Where("price <= ?", maxPrice)
+	}
+
+	if bedrooms := c.Query("bedrooms"); bedrooms != "" {
+		query = query.Where("bedrooms = ?", bedrooms)
+	}
+
+	return utils.Paginate(c, query, &models.Property{}, &properties)
 }
 
 // GetPropertyByID

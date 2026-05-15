@@ -51,12 +51,14 @@ func (p PropertyController) Create(c *gin.Context) {
 }
 
 func (p PropertyController) GetAll(c *gin.Context) {
-	properties, err := services.GetAllProperties()
+	result, err := services.GetAllProperties(c)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch properties"})
 		return
 	}
-	c.JSON(http.StatusOK, properties)
+
+	c.JSON(http.StatusOK, result)
 }
 
 func (p PropertyController) GetByID(c *gin.Context) {

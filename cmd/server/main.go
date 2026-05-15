@@ -15,7 +15,10 @@ func main() {
 	_ = godotenv.Load()
 
 	config.ConnectDB()
-	config.DB.AutoMigrate(&models.User{})
+	config.DB.AutoMigrate(
+		&models.User{},
+		&models.Property{},
+	)
 
 	route := gin.Default()
 	routes.SetupRoutes(route)

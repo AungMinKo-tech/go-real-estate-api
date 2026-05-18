@@ -26,6 +26,7 @@ func main() {
 	config.DB.AutoMigrate(
 		&models.User{},
 		&models.Property{},
+		&models.PropertyImage{},
 	)
 
 	route := gin.Default()

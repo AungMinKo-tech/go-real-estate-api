@@ -33,5 +33,6 @@ type Property struct {
 
 	CreatedAt time.Time
 
-	User User `gorm:"foreignKey:UserID"`
+	User   User            `gorm:"foreignKey:UserID"`
+	Images []PropertyImage `gorm:"foreignKey:PropertyID" json:"images"`
 }

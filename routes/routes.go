@@ -22,6 +22,7 @@ func SetupRoutes(route *gin.Engine) {
 		v1.POST("/login", auth.Login)
 
 		v1.GET("/properties", propertyController.GetAll)
+		route.Static("/uploads", "./uploads")
 	}
 
 	// Protected Routes
@@ -44,6 +45,7 @@ func SetupRoutes(route *gin.Engine) {
 			staffOnly.POST("/properties", propertyController.Create)
 			staffOnly.PUT("/properties/:id", propertyController.Update)
 			staffOnly.DELETE("/properties/:id", propertyController.Delete)
+			staffOnly.POST("/properties/:id/images", propertyController.UploadImages)
 		}
 	}
 }

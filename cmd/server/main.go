@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,13 @@ import (
 )
 
 func main() {
+	if _, err := os.Stat("uploads"); os.IsNotExist(err) {
+		err := os.Mkdir("uploads", 0755)
+		if err != nil {
+			log.Fatal("Failed to create uploads directory:", err)
+		}
+	}
+
 	_ = godotenv.Load()
 
 	config.ConnectDB()

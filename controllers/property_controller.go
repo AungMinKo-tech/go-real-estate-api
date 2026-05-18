@@ -3,10 +3,17 @@ package controllers
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
+	"real-estate-api/config"
+	"real-estate-api/models"
 	"real-estate-api/services"
 
 	"github.com/gin-gonic/gin"
+
+	"fmt"
+	"path/filepath"
+	"time"
 )
 
 type PropertyController struct{}
@@ -116,4 +123,50 @@ func (p PropertyController) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Deleted successfully"})
+}
+
+func (p PropertyController) UploadImages(c *gin.Context) {
+	propertyID := c.Param("id")
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Failed to parse form data"})
+		return
+	}
+
+	files := form.File["images"]
+	if len(files) == 0 {
+		c.JSON(400, gin.H{"error": "No images provided"})
+		return
+	}
+
+	var savedImages []models.PropertyImage
+
+	for _, file := range files {
+		extension := filepath.Ext(file.Filename)
+		newFileName := fmt.Sprintf("%d%s", time.Now().UnixNano(), extension)
+
+		savePath := filepath.Join("uploads", newFileName)
+
+		if err := c.SaveUploadedFile(file, savePath); err != nil {
+			c.JSON(500, gin.H{"error": "Failed to save image"})
+			return
+		}
+
+		dbPath := "/" + savePath
+		pID, _ := strconv.Atoi(propertyID)
+
+		img := models.PropertyImage{
+			PropertyID: uint(pID),
+			ImagePath:  dbPath,
+		}
+
+		config.DB.Create(&img)
+		savedImages = append(savedImages, img)
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Images uploaded successfully",
+		"data":    savedImages,
+	})
 }

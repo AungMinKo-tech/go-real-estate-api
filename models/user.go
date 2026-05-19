@@ -9,4 +9,5 @@ type User struct {
 	PasswordHash string `json:"-"`
 	Phone        string `json:"phone"`
 	Role         string `json:"role" gorm:"default:user"` // user/agent/admin
+	IsBanned     bool   `json:"is_banned" gorm:"default:false"`
 }

@@ -14,6 +14,7 @@ func SetupRoutes(route *gin.Engine) {
 	inquiryController := controllers.InquiryController{}
 	chatController := controllers.ChatController{}
 	notificationController := controllers.NotificationController{}
+	userController := controllers.UserController{}
 
 	// Public Routes
 	v1 := route.Group("/api/v1")
@@ -45,11 +46,15 @@ func SetupRoutes(route *gin.Engine) {
 		protected.GET("/notifications", notificationController.GetMyNotifications)
 		protected.PUT("/notifications/read", notificationController.ReadAll)
 
+		protected.GET("/users/profile", userController.GetProfile)
+		protected.PUT("/users/profile", userController.UpdateProfile)
+
 		// Admin Only Routes
 		adminOnly := protected.Group("/")
 		adminOnly.Use(middleware.RoleMiddleware("admin"))
 		{
-			//
+			adminOnly.GET("/admin/users", userController.AdminGetAllUsers)
+			adminOnly.POST("/admin/users/ban", userController.AdminUpdateBanStatus)
 		}
 
 		// Staff Only Routes

@@ -12,6 +12,7 @@ func SetupRoutes(route *gin.Engine) {
 	propertyController := controllers.PropertyController{}
 	favoriteController := controllers.FavoriteController{}
 	inquiryController := controllers.InquiryController{}
+	chatController := controllers.ChatController{}
 
 	// Public Routes
 	v1 := route.Group("/api/v1")
@@ -31,12 +32,14 @@ func SetupRoutes(route *gin.Engine) {
 	protected := v1.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		v1.GET("/properties/:id", propertyController.GetByID)
+		protected.GET("/properties/:id", propertyController.GetByID)
 
-		v1.POST("/favorites/:property_id", favoriteController.Toggle)
-		v1.GET("/favorites", favoriteController.GetMyFavorites)
+		protected.POST("/favorites/:property_id", favoriteController.Toggle)
+		protected.GET("/favorites", favoriteController.GetMyFavorites)
 
-		v1.POST("/inquiries", inquiryController.SendInquiry)
+		protected.POST("/inquiries", inquiryController.SendInquiry)
+
+		protected.GET("/ws", chatController.HandleWS)
 
 		// Admin Only Routes
 		adminOnly := protected.Group("/")

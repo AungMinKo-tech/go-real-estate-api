@@ -10,6 +10,7 @@ import (
 	"real-estate-api/config"
 	"real-estate-api/models"
 	"real-estate-api/routes"
+	"real-estate-api/services"
 )
 
 func main() {
@@ -29,10 +30,13 @@ func main() {
 		&models.PropertyImage{},
 		&models.Favorite{},
 		&models.Inquiry{},
+		&models.ChatMessage{},
 	)
 
 	route := gin.Default()
 	routes.SetupRoutes(route)
+
+	go services.GlobalHub.Run()
 
 	port := os.Getenv("APP_PORT")
 	if port == "" {

@@ -31,6 +31,7 @@ func main() {
 		&models.Favorite{},
 		&models.Inquiry{},
 		&models.ChatMessage{},
+		&models.Notification{},
 	)
 
 	route := gin.Default()

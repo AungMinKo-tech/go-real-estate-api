@@ -24,6 +24,8 @@ func CreateInquiry(userID uint, propertyID uint, message string) (models.Inquiry
 		return models.Inquiry{}, err
 	}
 
+	go SendNotification(property.UserID, "New Property Inquiry", "Someone wants to check out your property listing.", "inquiry")
+
 	return inquiry, nil
 }
 

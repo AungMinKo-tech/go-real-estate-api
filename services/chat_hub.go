@@ -65,10 +65,22 @@ func (h *ChatHub) BroadcastMessage(senderID uint, rawMessage []byte) {
 	config.DB.Create(&dbMsg)
 
 	h.Mu.Lock()
-	receiverConn, online := h.Clients[msg.ReceiverID]
+	receiverConn, receiverOnline := h.Clients[msg.ReceiverID]
+	senderConn, senderOnline := h.Clients[senderID]
 	h.Mu.Unlock()
 
-	if online {
+	if receiverOnline {
 		receiverConn.WriteJSON(dbMsg)
 	}
+
+	if senderOnline {
+		senderConn.WriteJSON(dbMsg)
+	}
+
+	go SendNotification(
+		msg.ReceiverID,
+		"New Message",
+		"A new letter has arrived.",
+		"chat",
+	)
 }

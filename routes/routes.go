@@ -13,6 +13,7 @@ func SetupRoutes(route *gin.Engine) {
 	favoriteController := controllers.FavoriteController{}
 	inquiryController := controllers.InquiryController{}
 	chatController := controllers.ChatController{}
+	notificationController := controllers.NotificationController{}
 
 	// Public Routes
 	v1 := route.Group("/api/v1")
@@ -40,6 +41,9 @@ func SetupRoutes(route *gin.Engine) {
 		protected.POST("/inquiries", inquiryController.SendInquiry)
 
 		protected.GET("/ws", chatController.HandleWS)
+
+		protected.GET("/notifications", notificationController.GetMyNotifications)
+		protected.PUT("/notifications/read", notificationController.ReadAll)
 
 		// Admin Only Routes
 		adminOnly := protected.Group("/")

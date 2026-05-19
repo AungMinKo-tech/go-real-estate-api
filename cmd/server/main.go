@@ -28,6 +28,7 @@ func main() {
 		&models.Property{},
 		&models.PropertyImage{},
 		&models.Favorite{},
+		&models.Inquiry{},
 	)
 
 	route := gin.Default()

@@ -11,6 +11,7 @@ func SetupRoutes(route *gin.Engine) {
 	auth := controllers.AuthController{}
 	propertyController := controllers.PropertyController{}
 	favoriteController := controllers.FavoriteController{}
+	inquiryController := controllers.InquiryController{}
 
 	// Public Routes
 	v1 := route.Group("/api/v1")
@@ -23,7 +24,7 @@ func SetupRoutes(route *gin.Engine) {
 		v1.POST("/login", auth.Login)
 
 		v1.GET("/properties", propertyController.GetAll)
-		route.Static("/uploads", "./uploads")
+		v1.Static("/uploads", "./uploads")
 	}
 
 	// Protected Routes
@@ -34,6 +35,8 @@ func SetupRoutes(route *gin.Engine) {
 
 		v1.POST("/favorites/:property_id", favoriteController.Toggle)
 		v1.GET("/favorites", favoriteController.GetMyFavorites)
+
+		v1.POST("/inquiries", inquiryController.SendInquiry)
 
 		// Admin Only Routes
 		adminOnly := protected.Group("/")
@@ -50,6 +53,8 @@ func SetupRoutes(route *gin.Engine) {
 			staffOnly.PUT("/properties/:id", propertyController.Update)
 			staffOnly.DELETE("/properties/:id", propertyController.Delete)
 			staffOnly.POST("/properties/:id/images", propertyController.UploadImages)
+
+			staffOnly.GET("/inquiries/agent", inquiryController.GetMyLeads)
 		}
 	}
 }

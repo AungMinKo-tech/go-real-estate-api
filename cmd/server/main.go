@@ -27,6 +27,7 @@ func main() {
 		&models.User{},
 		&models.Property{},
 		&models.PropertyImage{},
+		&models.Favorite{},
 	)
 
 	route := gin.Default()
